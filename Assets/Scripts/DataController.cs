@@ -1,9 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DataController : MonoBehaviour
 {
+    //싱글톤 패턴
+    private static DataController instance;
+
+    public static DataController GetInstance()
+    {
+        if(instance == null)
+        {
+            instance = FindObjectOfType<DataController>();
+
+            if(instance == null)
+            {
+                GameObject container = new GameObject("DataController");
+                
+                instance = container.AddComponent<DataController>();
+            }
+        }
+        return instance;
+    }
+
+
+
     private int m_gold = 0;
     private int m_goldPerClick = 0;
 
@@ -18,7 +40,7 @@ public class DataController : MonoBehaviour
 
     public void SetGold(int newGold)
     {
-        //GetInt는 키값과 매칭되는 데이터를 저장하는 함수
+        //SetInt는 키값과 매칭되는 데이터를 저장하는 함수
         m_gold = newGold;
         PlayerPrefs.SetInt("Gold", m_gold);
     }
@@ -34,6 +56,12 @@ public class DataController : MonoBehaviour
         m_gold += newGold;
         SetGold(m_gold);
     }
+    public void AddGoldPerClick(int newGoldPerClick)
+    {
+        m_goldPerClick += newGoldPerClick;
+        SetGoldPerClick(m_goldPerClick);
+    }
+
     public void SubGold(int newGold)
     {
         m_gold -= newGold;
